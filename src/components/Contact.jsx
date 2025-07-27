@@ -1,13 +1,12 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 export default function Contact() {
 
    const queryClient = useQueryClient();
-
+   const history = useHistory()
   
  const { contactId } = useParams();
 
