@@ -1,17 +1,26 @@
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
-export default function SideBar() {
-  const [contacts, setContacts] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("https://688247fb66a7eb81224e18ff.mockapi.io/fihrist/api/contact")
-      .then((res) => {
-        setContacts(res.data);
-      });
-  }, []);
+export default function SideBar() {
+  
+const { isPending, isError, data, error } = useQuery({
+  queryKey: ['contacts'],
+  queryFn: async () => {
+    const result = await axios.get("https://688247fb66a7eb81224e18ff.mockapi.io/fihrist/api/contact");
+  return result.data;
+  }
+})
+const contacts = data || [];
+ 
+if (isPending) {
+  return <span>Loading...</span>
+}
+
+if (isError) {
+    return <span>Error: {error.message}</span>
+  }
 
   return (
     <div

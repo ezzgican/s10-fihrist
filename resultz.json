@@ -1,0 +1,25 @@
+{
+  "stats": "0 passed, 5 failed out of 5",
+  "tests": [
+    {
+      "name": "main.jsx'e QueryClientProvider eklenmiş mi?",
+      "state": "fail"
+    },
+    {
+      "name": "SideBar componentindeki useEffect kaldırılmış mı?",
+      "state": "fail"
+    },
+    {
+      "name": "Contact componentindeki useEffect kaldırılmış mı?",
+      "state": "fail"
+    },
+    {
+      "name": "Yeni kullanıcı kayıt edildikten sonra invalidateQueries kullanılarak yeni datanın gelmesi sağlanıyor mu?",
+      "state": "fail"
+    },
+    {
+      "name": "Kullanıcıyı silindikten sonra invalidateQueries kullanılarak silinen kullanıcı adının listeden kalkması sağlanıyor mu?",
+      "state": "fail"
+    }
+  ]
+}

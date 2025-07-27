@@ -1,34 +1,41 @@
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
 export default function Contact() {
-  const { contactId } = useParams();
-  const [contact, setContact] = useState();
-  const history = useHistory();
 
-  useEffect(() => {
-    axios
-      .get(
-        `https://688247fb66a7eb81224e18ff.mockapi.io/fihrist/api/contact/${contactId}`
-      )
-      .then((res) => {
-        setContact(res.data);
-      });
-  }, [contactId]);
+   const queryClient = useQueryClient();
 
-  const handleDelete = () => {
-    axios
-      .delete(
-        `https://688247fb66a7eb81224e18ff.mockapi.io/fihrist/api/contact/${contactId}`
-      )
-      .then((res) => {
-        history.push("/");
-      });
-  };
+  
+ const { contactId } = useParams();
 
-  if (!contact) return "Böyle bir kullanıcı yok";
+ const { data, isLoading } = useQuery({
+  queryKey: ['contact', contactId],
+  queryFn: async () => {
+    const res= await axios.get( `https://688247fb66a7eb81224e18ff.mockapi.io/fihrist/api/contact/${contactId}`);
+    return res.data;
+  },
+  enabled: !!contactId
+ })
+
+const contact = data;
+
+
+ const deleteContact = useMutation({
+  mutationFn: (id) => 
+    axios.delete(`https://688247fb66a7eb81224e18ff.mockapi.io/fihrist/api/contact/${contactId}`
+),
+  onSuccess: async () => {
+    await queryClient.invalidateQueries({ queryKey: ['contacts'] })
+    history.push("/");
+  }
+ })
+
+ if (isLoading) return <p>Yükleniyor...</p>;
+  if (!contact) return <p>Kişi bulunamadı</p>;
+
 
   return (
     <div id="contact" className="max-w-2xl flex gap-8 items-center">
@@ -67,7 +74,7 @@ export default function Contact() {
         )}
 
         <div className="mt-6">
-          <button className="text-red-500" onClick={handleDelete}>
+          <button className="text-red-500" onClick={() => deleteContact.mutate(contact.id)}>
             Delete
           </button>
         </div>
